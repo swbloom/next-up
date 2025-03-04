@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engineer Picker</title>
+    <title>Next Up</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -77,11 +77,11 @@
     </style>
 </head>
 <body>
-    <h1>🎲 Engineer Picker 🎲</h1>
+    <h1>🎲 Next Up 🎲</h1>
     <div id="listContainer">
         <ul id="engineerList"></ul>
     </div>
-    <button onclick="pickEngineer()" id="pickButton">Pick an Engineer</button>
+    <button onclick="pickEngineer()" id="pickButton">Who's Next?</button>
     <p id="result"></p>
     <p id="remainingEngineers"></p>
 
@@ -120,7 +120,7 @@
 
         function pickEngineer() {
             if (engineers.length === 0) {
-                document.getElementById('result').textContent = 'All engineers have been picked!';
+                document.getElementById('result').textContent = 'Everyone has been picked!';
                 document.getElementById('pickButton').disabled = true;
                 return;
             }
@@ -141,7 +141,7 @@
 
         function updateRemainingEngineers() {
             const remainingCount = engineers.length;
-            document.getElementById('remainingEngineers').textContent = `Remaining engineers: ${remainingCount}`;
+            document.getElementById('remainingEngineers').textContent = `Remaining: ${remainingCount}`;
             document.getElementById('pickButton').disabled = remainingCount === 0;
         }
 
@@ -149,4 +149,3 @@
         initializeList();
     </script>
 </body>
-</html
