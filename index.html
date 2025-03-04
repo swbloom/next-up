@@ -16,6 +16,11 @@
         h1 {
             color: #2c3e50;
             text-align: center;
+            animation: bounce 1s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         #teamList {
             list-style-type: none;
@@ -29,6 +34,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+        #teamList li:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         button {
             background-color: #3498db;
@@ -39,9 +49,11 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
         button:hover {
             background-color: #2980b9;
+            transform: translateY(-2px);
         }
         button:disabled {
             background-color: #bdc3c7;
@@ -53,7 +65,13 @@
             text-align: center;
             margin: 40px 0;
             color: #2c3e50;
-            display: none;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease;
+        }
+        #result.show {
+            opacity: 1;
+            transform: scale(1);
         }
         #remainingMembers {
             text-align: center;
@@ -70,7 +88,7 @@
         .remove:hover {
             background-color: #c0392b;
         }
-        #pickButton {
+        #startButton, #nextButton {
             display: block;
             margin: 20px auto;
         }
@@ -81,7 +99,8 @@
     <div id="listContainer">
         <ul id="teamList"></ul>
     </div>
-    <button onclick="pickMember()" id="pickButton">Who's Next?</button>
+    <button onclick="startPicking()" id="startButton">Start</button>
+    <button onclick="pickNextMember()" id="nextButton" style="display: none;">Next</button>
     <p id="result"></p>
     <p id="remainingMembers"></p>
 
@@ -119,31 +138,36 @@
             initializeList();
         }
 
-        function pickMember() {
+        function startPicking() {
+            document.getElementById('listContainer').style.display = 'none';
+            document.getElementById('startButton').style.display = 'none';
+            document.getElementById('nextButton').style.display = 'block';
+            pickNextMember();
+        }
+
+        function pickNextMember() {
             if (team.length === 0) {
                 document.getElementById('result').textContent = 'Everyone has been picked!';
-                document.getElementById('pickButton').disabled = true;
+                document.getElementById('nextButton').style.display = 'none';
                 return;
             }
 
             const randomIndex = Math.floor(Math.random() * team.length);
             const pickedMember = team.splice(randomIndex, 1)[0];
             
-            document.getElementById('listContainer').style.display = 'none';
-            document.getElementById('result').style.display = 'block';
-            document.getElementById('result').textContent = `${pickedMember.emoji} ${pickedMember.name}`;
+            const resultElement = document.getElementById('result');
+            resultElement.classList.remove('show');
             
             setTimeout(() => {
-                document.getElementById('result').style.display = 'none';
-                document.getElementById('listContainer').style.display = 'block';
-                initializeList();
-            }, 3000);
+                resultElement.textContent = `${pickedMember.emoji} ${pickedMember.name}`;
+                resultElement.classList.add('show');
+                updateRemainingMembers();
+            }, 300);
         }
 
         function updateRemainingMembers() {
             const remainingCount = team.length;
             document.getElementById('remainingMembers').textContent = `Remaining: ${remainingCount}`;
-            document.getElementById('pickButton').disabled = remainingCount === 0;
         }
 
         // Initialize the list when the page loads
