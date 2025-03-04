@@ -17,11 +17,11 @@
             color: #2c3e50;
             text-align: center;
         }
-        #engineerList {
+        #teamList {
             list-style-type: none;
             padding: 0;
         }
-        #engineerList li {
+        #teamList li {
             background-color: #fff;
             margin: 5px 0;
             padding: 10px;
@@ -55,7 +55,7 @@
             color: #2c3e50;
             display: none;
         }
-        #remainingEngineers {
+        #remainingMembers {
             text-align: center;
             color: #7f8c8d;
         }
@@ -79,14 +79,14 @@
 <body>
     <h1>🎲 Next Up 🎲</h1>
     <div id="listContainer">
-        <ul id="engineerList"></ul>
+        <ul id="teamList"></ul>
     </div>
-    <button onclick="pickEngineer()" id="pickButton">Who's Next?</button>
+    <button onclick="pickMember()" id="pickButton">Who's Next?</button>
     <p id="result"></p>
-    <p id="remainingEngineers"></p>
+    <p id="remainingMembers"></p>
 
     <script>
-        const initialEngineers = [
+        const initialTeam = [
             {name: "Emily", emoji: "👩‍🔬"},
             {name: "Yosuke", emoji: "🧑‍💻"},
             {name: "Claudia", emoji: "👩‍🚀"},
@@ -97,40 +97,41 @@
             {name: "Simon", emoji: "🧑‍🚀"},
             {name: "Ev", emoji: "🧑‍🎨"},
             {name: "Flo", emoji: "👩‍🏫"},
-            {name: "Vic", emoji: "🧑‍🔬"}
+            {name: "Vic", emoji: "🧑‍🔬"},
+            {name: "Leo", emoji: "🦁"}
         ];
 
-        let engineers = [...initialEngineers];
+        let team = [...initialTeam];
 
         function initializeList() {
-            const list = document.getElementById('engineerList');
+            const list = document.getElementById('teamList');
             list.innerHTML = '';
-            engineers.forEach((engineer, index) => {
+            team.forEach((member, index) => {
                 const li = document.createElement('li');
-                li.innerHTML = `${engineer.emoji} ${engineer.name} <button class="remove" onclick="removeEngineer(${index})">✖</button>`;
+                li.innerHTML = `${member.emoji} ${member.name} <button class="remove" onclick="removeMember(${index})">✖</button>`;
                 list.appendChild(li);
             });
-            updateRemainingEngineers();
+            updateRemainingMembers();
         }
 
-        function removeEngineer(index) {
-            engineers.splice(index, 1);
+        function removeMember(index) {
+            team.splice(index, 1);
             initializeList();
         }
 
-        function pickEngineer() {
-            if (engineers.length === 0) {
+        function pickMember() {
+            if (team.length === 0) {
                 document.getElementById('result').textContent = 'Everyone has been picked!';
                 document.getElementById('pickButton').disabled = true;
                 return;
             }
 
-            const randomIndex = Math.floor(Math.random() * engineers.length);
-            const pickedEngineer = engineers.splice(randomIndex, 1)[0];
+            const randomIndex = Math.floor(Math.random() * team.length);
+            const pickedMember = team.splice(randomIndex, 1)[0];
             
             document.getElementById('listContainer').style.display = 'none';
             document.getElementById('result').style.display = 'block';
-            document.getElementById('result').textContent = `${pickedEngineer.emoji} ${pickedEngineer.name}`;
+            document.getElementById('result').textContent = `${pickedMember.emoji} ${pickedMember.name}`;
             
             setTimeout(() => {
                 document.getElementById('result').style.display = 'none';
@@ -139,9 +140,9 @@
             }, 3000);
         }
 
-        function updateRemainingEngineers() {
-            const remainingCount = engineers.length;
-            document.getElementById('remainingEngineers').textContent = `Remaining: ${remainingCount}`;
+        function updateRemainingMembers() {
+            const remainingCount = team.length;
+            document.getElementById('remainingMembers').textContent = `Remaining: ${remainingCount}`;
             document.getElementById('pickButton').disabled = remainingCount === 0;
         }
 
@@ -149,3 +150,4 @@
         initializeList();
     </script>
 </body>
+</html>
