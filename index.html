@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Picker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Engineer Picker</h1>
+    <textarea id="engineerList" rows="5" cols="50" placeholder="Enter engineer names, one per line"></textarea>
+    <br>
+    <button onclick="initializeList()">Initialize List</button>
+    <button onclick="pickEngineer()" id="pickButton" disabled>Pick an Engineer</button>
+    <p id="result"></p>
+    <p id="remainingEngineers"></p>
+
+    <script>
+        let engineers = [];
+
+        function initializeList() {
+            const input = document.getElementById('engineerList').value;
+            engineers = input.split('\n').filter(name => name.trim() !== '');
+            
+            if (engineers.length > 0) {
+                document.getElementById('pickButton').disabled = false;
+                updateRemainingEngineers();
+            } else {
+                alert('Please enter at least one engineer name.');
+            }
+        }
+
+        function pickEngineer() {
+            if (engineers.length === 0) {
+                document.getElementById('result').textContent = 'All engineers have been picked!';
+                document.getElementById('pickButton').disabled = true;
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * engineers.length);
+            const pickedEngineer = engineers.splice(randomIndex, 1)[0];
+            
+            document.getElementById('result').textContent = `Picked engineer: ${pickedEngineer}`;
+            updateRemainingEngineers();
+        }
+
+        function updateRemainingEngineers() {
+            const remainingCount = engineers.length;
+            document.getElementById('remainingEngineers').textContent = `Remaining engineers: ${remainingCount}`;
+        }
+    </script>
+</body>
+</html>
