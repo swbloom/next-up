@@ -6,38 +6,109 @@
     <title>Engineer Picker</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        #engineerList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #engineerList li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         button {
-            margin-top: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        #remainingEngineers {
+            text-align: center;
+            color: #7f8c8d;
+        }
+        .remove {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .remove:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
-    <h1>Engineer Picker</h1>
-    <textarea id="engineerList" rows="5" cols="50" placeholder="Enter engineer names, one per line"></textarea>
-    <br>
-    <button onclick="initializeList()">Initialize List</button>
-    <button onclick="pickEngineer()" id="pickButton" disabled>Pick an Engineer</button>
+    <h1>🎲 Engineer Picker 🎲</h1>
+    <ul id="engineerList"></ul>
+    <button onclick="pickEngineer()" id="pickButton">Pick an Engineer</button>
     <p id="result"></p>
     <p id="remainingEngineers"></p>
 
     <script>
-        let engineers = [];
+        const initialEngineers = [
+            {name: "Emily", emoji: "👩‍🔬"},
+            {name: "Yosuke", emoji: "🧑‍💻"},
+            {name: "Claudia", emoji: "👩‍🚀"},
+            {name: "Chris", emoji: "🧑‍🔧"},
+            {name: "Felipe", emoji: "👨‍🏭"},
+            {name: "Katie", emoji: "👩‍🔧"},
+            {name: "Anjali", emoji: "👩‍💼"},
+            {name: "Simon", emoji: "🧑‍🚀"},
+            {name: "Ev", emoji: "🧑‍🎨"},
+            {name: "Flo", emoji: "👩‍🏫"},
+            {name: "Vic", emoji: "🧑‍🔬"}
+        ];
+
+        let engineers = [...initialEngineers];
 
         function initializeList() {
-            const input = document.getElementById('engineerList').value;
-            engineers = input.split('\n').filter(name => name.trim() !== '');
-            
-            if (engineers.length > 0) {
-                document.getElementById('pickButton').disabled = false;
-                updateRemainingEngineers();
-            } else {
-                alert('Please enter at least one engineer name.');
-            }
+            const list = document.getElementById('engineerList');
+            list.innerHTML = '';
+            engineers.forEach((engineer, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${engineer.emoji} ${engineer.name} <button class="remove" onclick="removeEngineer(${index})">✖</button>`;
+                list.appendChild(li);
+            });
+            updateRemainingEngineers();
+        }
+
+        function removeEngineer(index) {
+            engineers.splice(index, 1);
+            initializeList();
         }
 
         function pickEngineer() {
@@ -50,14 +121,18 @@
             const randomIndex = Math.floor(Math.random() * engineers.length);
             const pickedEngineer = engineers.splice(randomIndex, 1)[0];
             
-            document.getElementById('result').textContent = `Picked engineer: ${pickedEngineer}`;
-            updateRemainingEngineers();
+            document.getElementById('result').textContent = `${pickedEngineer.emoji} ${pickedEngineer.name}`;
+            initializeList();
         }
 
         function updateRemainingEngineers() {
             const remainingCount = engineers.length;
             document.getElementById('remainingEngineers').textContent = `Remaining engineers: ${remainingCount}`;
+            document.getElementById('pickButton').disabled = remainingCount === 0;
         }
+
+        // Initialize the list when the page loads
+        initializeList();
     </script>
 </body>
 </html>
