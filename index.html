@@ -48,11 +48,12 @@
             cursor: not-allowed;
         }
         #result {
-            font-size: 24px;
+            font-size: 48px;
             font-weight: bold;
             text-align: center;
-            margin: 20px 0;
+            margin: 40px 0;
             color: #2c3e50;
+            display: none;
         }
         #remainingEngineers {
             text-align: center;
@@ -69,11 +70,17 @@
         .remove:hover {
             background-color: #c0392b;
         }
+        #pickButton {
+            display: block;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body>
     <h1>🎲 Engineer Picker 🎲</h1>
-    <ul id="engineerList"></ul>
+    <div id="listContainer">
+        <ul id="engineerList"></ul>
+    </div>
     <button onclick="pickEngineer()" id="pickButton">Pick an Engineer</button>
     <p id="result"></p>
     <p id="remainingEngineers"></p>
@@ -121,8 +128,15 @@
             const randomIndex = Math.floor(Math.random() * engineers.length);
             const pickedEngineer = engineers.splice(randomIndex, 1)[0];
             
+            document.getElementById('listContainer').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
             document.getElementById('result').textContent = `${pickedEngineer.emoji} ${pickedEngineer.name}`;
-            initializeList();
+            
+            setTimeout(() => {
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('listContainer').style.display = 'block';
+                initializeList();
+            }, 3000);
         }
 
         function updateRemainingEngineers() {
@@ -135,4 +149,4 @@
         initializeList();
     </script>
 </body>
-</html>
+</html
